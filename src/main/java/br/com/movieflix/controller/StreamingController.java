@@ -31,10 +31,10 @@ public class StreamingController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StreamingDTO> getStreamingId(@PathVariable Long id) {
+    public ResponseEntity<Optional<StreamingDTO>> getStreamingId(@PathVariable Long id) {
         Optional<StreamingDTO> optionalStreaming = streamingService.findById(id);
         if (optionalStreaming.isPresent()) {
-            return ResponseEntity.ok(optionalStreaming.get());
+            return ResponseEntity.ok(optionalStreaming);
         } else {
             return null;
         }
