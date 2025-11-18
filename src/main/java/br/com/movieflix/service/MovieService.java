@@ -1,11 +1,7 @@
 package br.com.movieflix.service;
 
-import br.com.movieflix.DTO.CategoryDTO;
 import br.com.movieflix.DTO.MovieDTO;
-import br.com.movieflix.DTO.StreamingDTO;
-import br.com.movieflix.entity.Category;
 import br.com.movieflix.entity.Movie;
-import br.com.movieflix.entity.Streaming;
 import br.com.movieflix.mapper.MovieMapper;
 import br.com.movieflix.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
