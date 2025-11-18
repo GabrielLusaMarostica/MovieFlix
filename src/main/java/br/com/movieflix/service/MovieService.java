@@ -1,7 +1,9 @@
 package br.com.movieflix.service;
 
+import br.com.movieflix.DTO.CategoryDTO;
 import br.com.movieflix.DTO.MovieDTO;
 import br.com.movieflix.DTO.StreamingDTO;
+import br.com.movieflix.entity.Category;
 import br.com.movieflix.entity.Movie;
 import br.com.movieflix.entity.Streaming;
 import br.com.movieflix.mapper.MovieMapper;
@@ -42,6 +44,19 @@ public class MovieService {
         return movie.map(movieMapper::map);
     }
 
+    public List<MovieDTO> findMovieByCategory(Long categoryId) {
+        List<Movie> movies = movieRepository.findByCategoryId(categoryId);
+        List<MovieDTO> resultado = new ArrayList<>();
+
+        for (Movie movie : movies) {
+            MovieDTO dto = movieMapper.map(movie);
+            resultado.add(dto);
+        }
+
+        return resultado;
+    }
+
+
     public MovieDTO updateMovie(Long id, MovieDTO movieDTO){
         Optional<Movie> movie = movieRepository.findById(id);
         if(movie.isPresent()){
@@ -51,7 +66,6 @@ public class MovieService {
             return movieMapper.map(movieSalvo);
         }
         return null;
-
     }
 
     public void deleteMovie(Long id){

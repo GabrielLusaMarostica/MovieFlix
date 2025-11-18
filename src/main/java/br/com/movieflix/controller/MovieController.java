@@ -1,7 +1,6 @@
 package br.com.movieflix.controller;
 
 import br.com.movieflix.DTO.MovieDTO;
-import br.com.movieflix.entity.Movie;
 import br.com.movieflix.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,6 +38,12 @@ public class MovieController {
             return null;
         }
     }
+
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<MovieDTO>> getByCategory(@PathVariable Long categoryId) {
+        return ResponseEntity.ok(movieService.findMovieByCategory(categoryId));
+    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<MovieDTO> updateMovie(@PathVariable Long id, @RequestBody MovieDTO movieDTO){
