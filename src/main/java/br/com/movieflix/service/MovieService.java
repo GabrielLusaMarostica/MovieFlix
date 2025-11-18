@@ -42,6 +42,18 @@ public class MovieService {
         return movie.map(movieMapper::map);
     }
 
+    public MovieDTO updateMovie(Long id, MovieDTO movieDTO){
+        Optional<Movie> movie = movieRepository.findById(id);
+        if(movie.isPresent()){
+            Movie movieAtualizado = movieMapper.map(movieDTO);
+            movieAtualizado.setId(id);
+            Movie movieSalvo = movieRepository.save(movieAtualizado);
+            return movieMapper.map(movieSalvo);
+        }
+        return null;
+
+    }
+
     public void deleteMovie(Long id){
         movieRepository.deleteById(id);
     }

@@ -1,6 +1,7 @@
 package br.com.movieflix.controller;
 
 import br.com.movieflix.DTO.MovieDTO;
+import br.com.movieflix.entity.Movie;
 import br.com.movieflix.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class MovieController {
         return ResponseEntity.ok(movieService.findAll());
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Optional<MovieDTO>> getMovieById(@PathVariable Long id){
         Optional<MovieDTO> movieDTO = movieService.findById(id);
         if(movieDTO.isPresent()) {
@@ -39,7 +40,16 @@ public class MovieController {
         }
     }
 
-    @DeleteMapping("{id}")
+    @PutMapping("/{id}")
+    public ResponseEntity<MovieDTO> updateMovie(@PathVariable Long id, @RequestBody MovieDTO movieDTO){
+        if(movieService.findById(id).isPresent()){
+            MovieDTO movie = movieService.updateMovie(id, movieDTO);
+            return ResponseEntity.ok(movie);
+        }
+        return null;
+    }
+
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteMovie(@PathVariable Long id){
         if(movieService.findById(id).isPresent()){
             movieService.deleteMovie(id);
