@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/movieflix/  auth")
+@RequestMapping("/movieflix/auth")
 public class AuthController {
 
     private final UserService userService;
