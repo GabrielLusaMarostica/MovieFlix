@@ -14,25 +14,40 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+//Diz ao Spring: "Essa classe cria Beans e configura o sistema."
 @Configuration
+//Liga o Spring Security.
 @EnableWebSecurity
+//Gera um construtor com os atributos final.
+//Isso é usado para injetar o SecurityFilter automaticamente.
 @RequiredArgsConstructor
+//Essa classe define como a segurança da sua aplicação funciona, tudo passa por aqui
 public class SecurityConfig {
 
+    //Esse é o filtro que valida o JWT.
     private final SecurityFilter securityFilter;
 
-    @Bean //digo que o spring para que ele gerencia o metodo
+    //Esse metodo diz
+    //Como proteger rotas
+    //Quais endpoints são públicos
+    //Como lidar com sessões
+    //Quais filtros devem rodar
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        //todos requests que serao feitos, será verificado se essa chamada vem de algum user valido, ou se ele está acessando algo que possa ter acesso
         return http
+                //O Spring Security HABILITA CSRF por padrão.
+                //Mas CSRF só faz sentido quando há sessão e cookies.
                 .csrf(csrf -> csrf.disable())
+                //aqui diz: "Eu não vou usar sessão para guardar o usuário.
+                //Cada requisição deve trazer o JWT."
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                //configura para que as rotas de register e login sejam abertas para todos, e qualquer outro request, necessita que o usuario esteja autenticado
+                //define as rotas publicas e privadas, todos sao autorizados a usar o registro e login, todos os outros requests, é necessario estar autenticado
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/movieflix/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/movieflix/auth/login").permitAll()
                         .anyRequest().authenticated()
                 )
+                //"Executa os filtros securityFilter ANTES do filtro padrão do Spring."
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
@@ -42,8 +57,8 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+    //BCrypt é o algoritmo recomendado pela Spring Security.
     @Bean
-    //quando alguem fizer uma soliticao de um passwordencoder, ele retornara o passwordencorder criptografado
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
